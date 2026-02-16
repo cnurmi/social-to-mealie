@@ -4,6 +4,19 @@
 
 set -e
 
+# Load a Docker secret file into an environment variable.
+# Usage: load_secret ENV_VAR_NAME secret_filename
+load_secret() {
+  local env_var="$1"
+  local secret_file="/run/secrets/$2"
+  if [ -f "$secret_file" ]; then
+    export "$env_var=$(cat "$secret_file")"
+  fi
+}
+
+load_secret MINIMAX_API_KEY minimax_api_key
+load_secret MEALIE_API_KEY mealie_api_key
+
 YTDLP_BIN_PATH="${YTDLP_PATH:-./yt-dlp}"
 YTDLP_VER="${YTDLP_VERSION:-}"
 

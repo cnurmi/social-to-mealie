@@ -1,0 +1,25 @@
+secrets:
+  minimax_api_key:
+    file: /home/cnurmi/docker/secrets/minimax_api_key
+  mealie_api_key:
+    file: /home/cnurmi/docker/secrets/mealie_api_key
+
+services:
+  social-to-mealie:
+    restart: unless-stopped
+    image: registry.nurhome.xyz/social-to-mealie:latest
+    container_name: social-to-mealie
+    secrets:
+      - minimax_api_key
+      - mealie_api_key
+    environment:
+      - TEXT_PROVIDER=minimax
+      - TEXT_MODEL=MiniMax-M2
+      - MEALIE_URL=http://mealie:9000
+      - MEALIE_GROUP_NAME=home
+      - LOCAL_TRANSCRIPTION_MODEL=Xenova/whisper-base
+      - YTDLP_VERSION=latest
+    ports:
+      - 4000:3000
+    security_opt:
+      - no-new-privileges:true

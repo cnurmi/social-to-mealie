@@ -10,7 +10,7 @@ export type envTypes = {
     OPENAI_API_KEY: string;
     TRANSCRIPTION_MODEL: string;
     TEXT_MODEL: string;
-    TEXT_PROVIDER: string; // "openai" | "minimax", defaults to "openai"
+    TEXT_PROVIDER: "openai" | "minimax";
     MINIMAX_API_KEY: string; // required when TEXT_PROVIDER=minimax
     MEALIE_URL: string;
     MEALIE_API_KEY: string;

@@ -1,5 +1,6 @@
 import { env } from "./constants";
 import { createOpenAI } from "@ai-sdk/openai";
+import { createMinimax } from "vercel-minimax-ai-provider";
 import { experimental_transcribe, generateObject } from "ai";
 import { z } from "zod";
 import { pipeline } from '@huggingface/transformers';
@@ -11,7 +12,15 @@ const client = createOpenAI({
 });
 
 const transcriptionModel = client.transcription(env.TRANSCRIPTION_MODEL);
-const textModel = client.chat(env.TEXT_MODEL);
+
+function getTextModel() {
+    if (env.TEXT_PROVIDER === "minimax") {
+        const minimaxClient = createMinimax({ apiKey: env.MINIMAX_API_KEY });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return minimaxClient(env.TEXT_MODEL) as any;
+    }
+    return client.chat(env.TEXT_MODEL);
+}
 
 export async function getTranscription(blob: Blob): Promise<string> {
     if (env.LOCAL_TRANSCRIPTION_MODEL) {
@@ -80,7 +89,7 @@ export async function generateRecipeFromAI(
 
     try {
         const { object } = await generateObject({
-            model: textModel,
+            model: getTextModel(),
             schema,
             prompt: `
          You are an expert chef assistant. Review the following recipe transcript and refine it for clarity, conciseness, and accuracy.

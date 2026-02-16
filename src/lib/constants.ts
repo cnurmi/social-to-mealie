@@ -7,6 +7,8 @@ export const env: envTypes = {
         process.env.TRANSCRIPTION_MODEL || process.env.TRANSCRIPTION_MODEL
     )?.trim() as string,
     TEXT_MODEL: process.env.TEXT_MODEL?.trim() as string,
+    TEXT_PROVIDER: process.env.TEXT_PROVIDER?.trim() || "openai",
+    MINIMAX_API_KEY: process.env.MINIMAX_API_KEY?.trim() || "",
     MEALIE_URL: process.env.MEALIE_URL?.trim().replace(/\/+$/, "") as string,
     MEALIE_API_KEY: process.env.MEALIE_API_KEY?.trim().replace(
         /\n/g,

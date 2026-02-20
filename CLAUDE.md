@@ -57,7 +57,7 @@ TEXT_MODEL=gpt-4o-mini
 
 This repo is deployed on `mediasrv` via the homeserver Docker Compose stack.
 
-**Image registry:** `registry.nurhome.xyz/social-to-mealie:latest`
+**Image registry:** `ghcr.io/cnurmi/social-to-mealie:latest`
 **Compose file:** `/home/cnurmi/docker/compose/mediasrv/social-to-mealie.yml`
 **URL:** `https://recipes.nurhome.xyz`
 

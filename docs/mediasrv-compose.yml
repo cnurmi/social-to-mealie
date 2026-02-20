@@ -7,7 +7,7 @@ secrets:
 services:
   social-to-mealie:
     restart: unless-stopped
-    image: registry.nurhome.xyz/social-to-mealie:latest
+    image: ghcr.io/cnurmi/social-to-mealie:latest
     container_name: social-to-mealie
     secrets:
       - groq_api_key

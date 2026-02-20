@@ -64,25 +64,35 @@ export async function generateRecipeFromAI(
     extraPrompt: string,
     tags: string[]
 ) {
-    const schema = z.object({
-        "@context": z.string().default("https://schema.org"),
-        "@type": z.string().default("Recipe"),
-        name: z.string(),
-        image: z.string().optional(),
-        url: z.string().optional(),
-        description: z.string(),
-        recipeIngredient: z.array(z.string()),
-        recipeInstructions: z.array(
-            z.object({
-                "@type": z.string().default("HowToStep"),
-                text: z.string(),
-            })
-        ),
-        keywords: z.preprocess(
-            (val) => typeof val === "string" ? val.split(/[\s,]+/).map((k: string) => k.trim()).filter(Boolean) : val,
-            z.array(z.string())
-        ).optional(),
-    });
+    const schema = z.preprocess(
+        (val: any) => {
+            if (val && typeof val === "object") {
+                // LLMs sometimes use non-schema.org field names
+                if (!val.recipeIngredient && val.ingredients) val.recipeIngredient = val.ingredients;
+                if (!val.recipeInstructions && val.instructions) val.recipeInstructions = val.instructions;
+            }
+            return val;
+        },
+        z.object({
+            "@context": z.string().default("https://schema.org"),
+            "@type": z.string().default("Recipe"),
+            name: z.string(),
+            image: z.string().optional(),
+            url: z.string().optional(),
+            description: z.string(),
+            recipeIngredient: z.array(z.string()),
+            recipeInstructions: z.array(
+                z.object({
+                    "@type": z.string().default("HowToStep"),
+                    text: z.string(),
+                })
+            ),
+            keywords: z.preprocess(
+                (val) => typeof val === "string" ? val.split(/[\s,]+/).map((k: string) => k.trim()).filter(Boolean) : val,
+                z.array(z.string())
+            ).optional(),
+        })
+    );
 
     try {
         const { object } = await generateObject({

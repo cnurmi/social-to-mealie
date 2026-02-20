@@ -15,7 +15,7 @@ const transcriptionModel = client.transcription(env.TRANSCRIPTION_MODEL);
 const textModel = env.TEXT_PROVIDER === "minimax"
     ? createOpenAI({ baseURL: "https://api.minimax.io/v1", apiKey: env.MINIMAX_API_KEY }).chat(env.TEXT_MODEL)
     : env.TEXT_PROVIDER === "groq"
-    ? createOpenAI({ baseURL: "https://api.groq.com/openai/v1", apiKey: env.GROQ_API_KEY, structuredOutputs: false }).chat(env.TEXT_MODEL)
+    ? createOpenAI({ baseURL: "https://api.groq.com/openai/v1", apiKey: env.GROQ_API_KEY }).chat(env.TEXT_MODEL)
     : client.chat(env.TEXT_MODEL);
 
 export async function getTranscription(blob: Blob): Promise<string> {
@@ -87,6 +87,9 @@ export async function generateRecipeFromAI(
         const { object } = await generateObject({
             model: textModel,
             schema,
+            providerOptions: {
+                openai: { structuredOutputs: false },
+            },
             prompt: `
          You are an expert chef assistant. Review the following recipe transcript and refine it for clarity, conciseness, and accuracy.
         Ensure ingredients and instructions are well-formatted and easy to follow.

@@ -78,7 +78,10 @@ export async function generateRecipeFromAI(
                 text: z.string(),
             })
         ),
-        keywords: z.array(z.string()).optional(),
+        keywords: z.preprocess(
+            (val) => typeof val === "string" ? val.split(/[\s,]+/).map((k: string) => k.trim()).filter(Boolean) : val,
+            z.array(z.string())
+        ).optional(),
     });
 
     try {

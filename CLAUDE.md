@@ -9,25 +9,38 @@ Extracts recipes from social media URLs (via yt-dlp + Whisper transcription) and
 
 Custom additions in this fork:
 - MiniMax as a selectable text provider (via `TEXT_PROVIDER=minimax`)
+- Groq as a selectable text provider (via `TEXT_PROVIDER=groq`)
 
 ## Tech Stack
 
 - Next.js 16, TypeScript, Vercel AI SDK (`ai` v5)
-- `@ai-sdk/openai` for both OpenAI-compatible and MiniMax requests
+- `@ai-sdk/openai` for OpenAI-compatible providers (OpenAI, MiniMax, Groq)
 - `@huggingface/transformers` for local Whisper transcription
 - Node.js ≥ 18 required (WSL default is v12 — use `nvm use 22`)
 
 ## AI Provider Configuration
 
-### MiniMax (active in production)
+### Groq (active in production)
+
+```
+TEXT_PROVIDER=groq
+TEXT_MODEL=llama-3.3-70b-versatile
+GROQ_API_KEY=<key>   # or Docker secret: groq_api_key
+```
+
+Groq uses an OpenAI-compatible API at `https://api.groq.com/openai/v1` via `@ai-sdk/openai`.
+Free tier available at [console.groq.com](https://console.groq.com). Budget alternative: `llama-3.1-8b-instant`.
+
+### MiniMax (supported, not in production)
+
 ```
 TEXT_PROVIDER=minimax
 TEXT_MODEL=MiniMax-M2
 MINIMAX_API_KEY=<key>   # or Docker secret: minimax_api_key
 ```
 MiniMax uses OpenAI-compatible API at `https://api.minimax.io/v1` via `@ai-sdk/openai`.
-The community package `vercel-minimax-ai-provider` was tried and dropped — it uses Anthropic
-format by default, which was incompatible. Direct `createOpenAI({ baseURL })` works reliably.
+Note: `sk-cp-` (coding plan) keys do NOT work — only PAYG `sk-api-` keys work.
+The community package `vercel-minimax-ai-provider` was tried and dropped — incompatible format.
 
 ### OpenAI (default)
 ```

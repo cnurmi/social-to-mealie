@@ -7,8 +7,9 @@ export const env: envTypes = {
         process.env.TRANSCRIPTION_MODEL || process.env.TRANSCRIPTION_MODEL
     )?.trim() as string,
     TEXT_MODEL: process.env.TEXT_MODEL?.trim() as string,
-    TEXT_PROVIDER: (process.env.TEXT_PROVIDER?.trim() || "openai") as "openai" | "minimax",
+    TEXT_PROVIDER: (process.env.TEXT_PROVIDER?.trim() || "openai") as "openai" | "minimax" | "groq",
     MINIMAX_API_KEY: process.env.MINIMAX_API_KEY?.trim() as string,
+    GROQ_API_KEY: process.env.GROQ_API_KEY?.trim() as string,
     MEALIE_URL: process.env.MEALIE_URL?.trim().replace(/\/+$/, "") as string,
     MEALIE_API_KEY: process.env.MEALIE_API_KEY?.trim().replace(
         /\n/g,

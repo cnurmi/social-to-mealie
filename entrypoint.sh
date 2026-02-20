@@ -15,6 +15,7 @@ load_secret() {
 }
 
 load_secret MINIMAX_API_KEY minimax_api_key
+load_secret GROQ_API_KEY groq_api_key
 load_secret MEALIE_API_KEY mealie_api_key
 
 YTDLP_BIN_PATH="${YTDLP_PATH:-./yt-dlp}"

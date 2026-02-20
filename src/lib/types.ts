@@ -10,8 +10,9 @@ export type envTypes = {
     OPENAI_API_KEY: string;
     TRANSCRIPTION_MODEL: string;
     TEXT_MODEL: string;
-    TEXT_PROVIDER: "openai" | "minimax";
+    TEXT_PROVIDER: "openai" | "minimax" | "groq";
     MINIMAX_API_KEY: string; // required when TEXT_PROVIDER=minimax
+    GROQ_API_KEY: string; // required when TEXT_PROVIDER=groq
     MEALIE_URL: string;
     MEALIE_API_KEY: string;
     MEALIE_GROUP_NAME: string;

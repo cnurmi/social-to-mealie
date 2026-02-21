@@ -81,11 +81,28 @@ export async function generateRecipeFromAI(
             url: z.string().optional(),
             description: z.string(),
             recipeIngredient: z.array(z.string()),
-            recipeInstructions: z.array(
-                z.object({
+            recipeInstructions: z.preprocess(
+                (val: any) => {
+                    if (!Array.isArray(val)) return val;
+                    // Flatten HowToSection -> HowToStep and normalize strings
+                    const steps: any[] = [];
+                    for (const item of val) {
+                        if (typeof item === "string") {
+                            steps.push({ "@type": "HowToStep", text: item });
+                        } else if (item?.["@type"] === "HowToSection" && Array.isArray(item.itemListElement)) {
+                            for (const step of item.itemListElement) {
+                                steps.push(typeof step === "string" ? { "@type": "HowToStep", text: step } : step);
+                            }
+                        } else {
+                            steps.push(item);
+                        }
+                    }
+                    return steps;
+                },
+                z.array(z.object({
                     "@type": z.string().default("HowToStep"),
                     text: z.string(),
-                })
+                }))
             ),
             keywords: z.preprocess(
                 (val) => typeof val === "string" ? val.split(/[\s,]+/).map((k: string) => k.trim()).filter(Boolean) : val,
